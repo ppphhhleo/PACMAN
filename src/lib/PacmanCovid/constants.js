@@ -30,6 +30,7 @@ export const STAGE_WIDTH = 28;
 export const STAGE_HEIGHT = 36;
 
 export const PLAYER_RADIUS = 0.8;
+// the size of the player in the grid
 
 export const WALL_COLOUR = '#0a1bc5';
 

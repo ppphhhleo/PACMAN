@@ -140,6 +140,7 @@ function getNavigatedMonsterVector(newPosition, collision, movedDistance, monste
     });
 
     const distanceFromPlayer = gridDistance(vectors[0].position, player.position);
+    // the player.position is the current real time position of the player
 
     if (distanceFromPlayer < constants.PLAYER_RADIUS * 1.8) {
         if (monster.eatingTime) {
