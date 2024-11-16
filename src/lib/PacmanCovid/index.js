@@ -9,7 +9,7 @@ import TopBar from "./TopBar";
 import AllFood from "./Food/All";
 import Monster from "./Monster";
 import Player from "./Player";
-
+import tracks from "./game/tracks";
 export default class PacmanCovid extends Component {
   constructor(props) {
     super(props);
@@ -24,6 +24,8 @@ export default class PacmanCovid extends Component {
     this.handleTheEnd = this.handleTheEnd.bind(this);
 
     this.onKey = (evt) => {
+      console.log('evt', evt.key);
+      // console.log(this.state);
       if (KEY_COMMANDS[evt.key] !== undefined) {
         return this.changeDirection(KEY_COMMANDS[evt.key]);
       }
@@ -46,13 +48,119 @@ export default class PacmanCovid extends Component {
       this.step();
     }
     if (prevProps.predictions !== this.props.predictions) {
-      console.log(this.props.predictions);
+      console.log("predictions", this.props.predictions);
       this.changeDirection(this.props.predictions);
     }
   }
+  getKeyFromDirectionValue(value) {
+    const keyMap = {
+      1: "ArrowUp",    // NORTH
+      3: "ArrowDown",  // SOUTH
+      2: "ArrowLeft",  // WEST
+      0: "ArrowRight", // EAST
+    };
+    return keyMap[value];
+  }
+  simulateKeyPress(directionValue) {
+    const key = this.getKeyFromDirectionValue(directionValue);
+    if (key) {
+      const event = new KeyboardEvent("keydown", { key });
+      window.dispatchEvent(event);
+    }
+  }
+  isValidMove(position, gridSize, monsters, track) {
+    const [x, y] = position;
+  
+    // Check out-of-bounds
+    if (x < 0 || x >= gridSize[0] || y < 0 || y >= gridSize[1]) return false;
+  
+    // Check track validity
+    const rowRanges = track[0][x]; // Get valid ranges for the row
+    if (!this.isWithinRanges(y, rowRanges)) return false;
+  
+    // Check for monsters
+    return !monsters.some(({ position: monsterPos }) =>
+      monsterPos[0] === x && monsterPos[1] === y
+    );
+  }
+  
+  isWithinRanges(value, ranges = []) {
+    return ranges.some(([start, end]) => value >= start && value <= end);
+  }
+
+  heuristic(position, food, monsters) {
+    const bigFood = food.filter(f => !f.eaten && f.big);
+    const smallFood = food.filter(f => !f.eaten && !f.big);
+  
+    const bigFoodDistances = bigFood.map(f =>
+      Math.abs(f.position[0] - position[0]) + Math.abs(f.position[1] - position[1])
+    );
+  
+    const smallFoodDistances = smallFood.map(f =>
+      Math.abs(f.position[0] - position[0]) + Math.abs(f.position[1] - position[1])
+    );
+  
+    const monsterDistances = monsters.map(m =>
+      Math.abs(m.position[0] - position[0]) + Math.abs(m.position[1] - position[1])
+    );
+  
+    const nearestBigFood = bigFoodDistances.length ? Math.min(...bigFoodDistances) : Infinity;
+    const nearestSmallFood = Math.min(...smallFoodDistances);
+    const nearestMonster = Math.min(...monsterDistances);
+  
+    return -nearestBigFood * 2 - nearestSmallFood + nearestMonster * 2;
+  }
+  
+findBestDirection(player, food, monsters, track) {
+  const directions = [
+    { direction: 'NORTH', delta: [0, -1], value: 1 },
+    { direction: 'SOUTH', delta: [0, 1], value: 3 },
+    { direction: 'WEST', delta: [-1, 0], value: 2 },
+    { direction: 'EAST', delta: [1, 0], value: 0 },
+  ];
+
+  const gridSize = [track[0].length, track[1].length];
+  let bestDirectionValue = player.direction;
+  let bestScore = -Infinity;
+
+  directions.forEach(({ delta, value }) => {
+    const newPosition = [
+      player.position[0] + delta[0],
+      player.position[1] + delta[1],
+    ];
+
+    if (this.isValidMove(newPosition, gridSize, monsters, track)) {
+      const score = this.heuristic(newPosition, food, monsters);
+
+      // Tiebreaker: prioritize current direction and proximity to food
+      if (score > bestScore || 
+         (score === bestScore && value === player.direction)) {
+        bestScore = score;
+        bestDirectionValue = value;
+      }
+    }
+  });
+
+  return bestDirectionValue;
+}
+
 
   step() {
+    const { player, food, monsters } = this.state;
+    // console.log('player', player);
+    // console.log('food', food);
+    // console.log('monsters', monsters);
+
+    const suggestedDirection = this.findBestDirection(player, food, monsters, tracks);
+    // console.log('direction', direction);
+    console.log('player direction', player.direction, 'next direction', suggestedDirection);
+    // this.changeDirection(direction);
+    // this.simulateKeyPress(suggestedDirection);
+    // this.changeDirection(suggestedDirection);
+
     const result = animate(this.state);
+    // console.log('result', result);
+    
 
     this.setState({
       ...result,
@@ -70,16 +178,16 @@ export default class PacmanCovid extends Component {
     clearTimeout(this.timers.animate);
   }
 
-  step() {
-    const result = animate(this.state);
+  // step() {
+  //   const result = animate(this.state);
 
-    this.setState({
-      ...result,
-    });
+  //   this.setState({
+  //     ...result,
+  //   });
 
-    clearTimeout(this.timers.animate);
-    this.timers.animate = setTimeout(() => this.step(), 20);
-  }
+  //   clearTimeout(this.timers.animate);
+  //   this.timers.animate = setTimeout(() => this.step(), 20);
+  // }
 
   changeDirection(direction) {
     this.setState(changeDirection(this.state, { direction }));
