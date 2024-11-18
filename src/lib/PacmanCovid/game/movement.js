@@ -102,7 +102,7 @@ export function getChangedVector(oldPosition, newPosition, oldDirection, newDire
 
             changedVector[oldPlane] = trackTo;
             changedVector[newPlane] += polarity * (movedDistance - movedDistanceBeforeTurn);
-
+            
             return changedVector;
         }
     }
