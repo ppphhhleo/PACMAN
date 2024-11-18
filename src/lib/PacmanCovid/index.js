@@ -9,6 +9,7 @@ import TopBar from "./TopBar";
 import AllFood from "./Food/All";
 import Monster from "./Monster";
 import Player from "./Player";
+import { testing } from "./ai";
 
 export default class PacmanCovid extends Component {
   constructor(props) {
@@ -58,6 +59,8 @@ export default class PacmanCovid extends Component {
       ...result,
     });
 
+    testing();
+
     clearTimeout(this.timers.animate);
     this.timers.animate = setTimeout(() => this.step(), 20);
   }
@@ -68,17 +71,6 @@ export default class PacmanCovid extends Component {
 
     clearTimeout(this.timers.start);
     clearTimeout(this.timers.animate);
-  }
-
-  step() {
-    const result = animate(this.state);
-
-    this.setState({
-      ...result,
-    });
-
-    clearTimeout(this.timers.animate);
-    this.timers.animate = setTimeout(() => this.step(), 20);
   }
 
   changeDirection(direction) {
