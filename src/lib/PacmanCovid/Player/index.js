@@ -139,16 +139,42 @@ export default class Player extends Component {
     // this.componentDidMount()
   }
 
-  render() {
-    const { gridSize, lost, position, direction } = this.props;
+  // render() {
+  //   const { gridSize, lost, position, direction } = this.props;
 
+  //   const pathProps = {
+  //     stroke: 'none',
+  //     fill: 'yellow'
+  //   };
+
+  //   const radius = gridSize * PLAYER_RADIUS;
+
+  //   const style = {
+  //     ...cssPosition(position, gridSize),
+  //     width: radius * 2,
+  //     height: radius * 2,
+  //     marginLeft: -radius,
+  //     marginTop: -radius
+  //   };
+
+  //   const offset = lost ? 1 : direction;
+
+  //   return (
+  //     <svg className="pacmancovid-player" style={style}>
+  //         <path d={pacmanPath(radius, this.state.angle, offset)} {...pathProps} />
+  //     </svg>
+  //   );
+  // }
+  render() {
+    const { gridSize, lost, position, direction, suggestedDirection } = this.props;
+  
     const pathProps = {
       stroke: 'none',
       fill: 'yellow'
     };
-
+  
     const radius = gridSize * PLAYER_RADIUS;
-
+  
     const style = {
       ...cssPosition(position, gridSize),
       width: radius * 2,
@@ -156,12 +182,49 @@ export default class Player extends Component {
       marginLeft: -radius,
       marginTop: -radius
     };
-
+  
     const offset = lost ? 1 : direction;
+  
+    // Define arrow 
+    const arrowSize = radius * 0.6; // Adjust arrow size relative to Pac-Man
+    const arrowPosition = { x: radius, y: radius }; // Centered on Pac-Man
+    const arrowDirectionMap = {
+      0: { x: arrowSize, y: 0 },  // EAST
+      1: { x: 0, y: -arrowSize }, // NORTH
+      2: { x: -arrowSize, y: 0 }, // WEST
+      3: { x: 0, y: arrowSize }   // SOUTH
+    };
+    const arrowDirection = arrowDirectionMap[suggestedDirection % 4] || { x: 0, y: 0 };
 
     return (
       <svg className="pacmancovid-player" style={style}>
-          <path d={pacmanPath(radius, this.state.angle, offset)} {...pathProps} />
+        {/* Pac-Man Path */}
+        <path d={pacmanPath(radius, this.state.angle, offset)} {...pathProps} />
+  
+        {/* Suggested Direction Arrow */}
+        <line
+          x1={arrowPosition.x}
+          y1={arrowPosition.y}
+          x2={arrowPosition.x + arrowDirection.x}
+          y2={arrowPosition.y + arrowDirection.y}
+          stroke="blue"
+          strokeWidth="2"
+          markerEnd="url(#arrowhead)" // Adds an arrowhead marker
+        />
+  
+        {/* Arrowhead Definition */}
+        <defs>
+          <marker
+            id="arrowhead"
+            markerWidth="10"
+            markerHeight="7"
+            refX="10"
+            refY="3.5"
+            orient="auto"
+          >
+            <polygon points="0 0, 10 3.5, 0 7" fill="red" />
+          </marker>
+        </defs>
       </svg>
     );
   }
