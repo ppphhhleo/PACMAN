@@ -21,6 +21,7 @@ export default class PacmanCovid extends Component {
       ...getInitialState(),
       isShowDialog: false,
       // isRunning: props.isRunning
+      suggestedDirection: 0,
     };
 
     this.handleTheEnd = this.handleTheEnd.bind(this);
@@ -155,14 +156,18 @@ findBestDirection(player, food, monsters, track) {
 
     const suggestedDirection = this.findBestDirection(player, food, monsters, tracks);
     // console.log('direction', direction);
-    console.log('player direction', player.direction, 'next direction', suggestedDirection);
+    // console.log('player direction', player.direction, 'next direction', suggestedDirection);
     // this.changeDirection(direction);
     // this.simulateKeyPress(suggestedDirection);
     // this.changeDirection(suggestedDirection);
 
     const result = animate(this.state);
     // console.log('result', result);
-    
+    const randomDirection = Math.floor(Math.random() * 4);
+    if (randomDirection !== player.direction) {
+      this.state.suggestedDirection = randomDirection;
+    }
+    console.log('suggestedDirection', this.state.suggestedDirection);
 
     this.setState({
       ...result,
@@ -215,6 +220,7 @@ findBestDirection(player, food, monsters, track) {
           lost={this.state.lost}
           isRunning={this.props.isRunning}
           onEnd={this.handleTheEnd}
+          suggestedDirection={this.state.suggestedDirection}
         />
         <Dialog
           open={this.state.isShowDialog}
