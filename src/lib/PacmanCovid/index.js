@@ -163,17 +163,17 @@ findBestDirection(player, food, monsters, track) {
 
     const result = animate(this.state);
     // console.log('result', result);
-    const randomDirection = Math.floor(Math.random() * 4);
-    if (randomDirection !== player.direction) {
-      this.state.suggestedDirection = randomDirection;
-    }
-    console.log('suggestedDirection', this.state.suggestedDirection);
 
     this.setState({
       ...result,
     });
 
     testing();
+    const randomDirection = Math.floor(Math.random() * 4);
+    if (randomDirection !== this.state.player.direction) {
+      this.state.suggestedDirection = randomDirection;
+    }
+    console.log('suggestedDirection', this.state.suggestedDirection);
 
     clearTimeout(this.timers.animate);
     this.timers.animate = setTimeout(() => this.step(), 20);
@@ -202,6 +202,7 @@ findBestDirection(player, food, monsters, track) {
       return <h1>Something went wrong.</h1>;
     }
 
+    console.log('RENDERsuggestedDirection', this.state.suggestedDirection);
     const props = { gridSize: 12, ...this.props };
 
     const monsters = this.state.monsters.map(({ id, ...monster }) => (
