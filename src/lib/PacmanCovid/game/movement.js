@@ -3,6 +3,7 @@ import tracks from './tracks';
 export function gridDistance(posA, posB) {
     // The Pacman stage is a kind of manhattan style map, with constraints
     // due to walls
+    // This function calculates the distance between monster's position and player's in this map
 
     return Math.abs(posA[0] - posB[0]) + Math.abs(posA[1] - posB[1]);
 }
@@ -101,7 +102,7 @@ export function getChangedVector(oldPosition, newPosition, oldDirection, newDire
 
             changedVector[oldPlane] = trackTo;
             changedVector[newPlane] += polarity * (movedDistance - movedDistanceBeforeTurn);
-
+            
             return changedVector;
         }
     }

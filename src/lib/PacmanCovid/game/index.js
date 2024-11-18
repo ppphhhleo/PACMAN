@@ -30,6 +30,7 @@ export function animate(state, { time = Date.now() } = {}) {
 export function changeDirection(state, { direction }) {
     const orderPolarityOld = orderPolarity(state.player.direction);
     const orderPolarityNew = orderPolarity(direction);
+    // console.log('orderPolarityOld', orderPolarityOld, 'orderPolarityNew', orderPolarityNew);
 
     if (orderPolarityOld.plane === orderPolarityNew.plane) {
         return {
