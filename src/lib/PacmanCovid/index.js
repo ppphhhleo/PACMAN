@@ -9,9 +9,12 @@ import TopBar from "./TopBar";
 import AllFood from "./Food/All";
 import Monster from "./Monster";
 import Player from "./Player";
-import { testing } from "./ai";
+import { bigFoodStrategy, findNextDecisionPoint } from "./ai";
 
 import tracks from "./game/tracks";
+import { adjacencyList } from "./adjacency_list";
+
+
 export default class PacmanCovid extends Component {
   constructor(props) {
     super(props);
@@ -86,7 +89,7 @@ export default class PacmanCovid extends Component {
       monsterPos[0] === x && monsterPos[1] === y
     );
   }
-  
+
   isWithinRanges(value, ranges = []) {
     return ranges.some(([start, end]) => value >= start && value <= end);
   }
@@ -111,9 +114,9 @@ export default class PacmanCovid extends Component {
     const nearestSmallFood = Math.min(...smallFoodDistances);
     const nearestMonster = Math.min(...monsterDistances);
   
-    return -nearestBigFood * 2 - nearestSmallFood + nearestMonster * 2;
+    return -nearestBigFood * 2 - nearestSmallFood + narestMonster * 2;
   }
-  
+
 findBestDirection(player, food, monsters, track) {
   const directions = [
     { direction: 'NORTH', delta: [0, -1], value: 1 },
@@ -149,31 +152,36 @@ findBestDirection(player, food, monsters, track) {
 
 
   step() {
+
     const { player, food, monsters } = this.state;
+
     // console.log('player', player);
     // console.log('food', food);
     // console.log('monsters', monsters);
 
-    const suggestedDirection = this.findBestDirection(player, food, monsters, tracks);
-    // console.log('direction', direction);
-    // console.log('player direction', player.direction, 'next direction', suggestedDirection);
-    // this.changeDirection(direction);
-    // this.simulateKeyPress(suggestedDirection);
-    // this.changeDirection(suggestedDirection);
+    // const suggestedDirection = this.findBestDirection(player, food, monsters, tracks);
+      const position = findNextDecisionPoint(player.position, player.direction)
+      console.log("AWD", position)
+    
+      const suggestedDirection = bigFoodStrategy(position, food);
+      // console.log(suggestedDirection)
+      // console.log('direction', direction);
+      // console.log('player direction', player.direction, 'next direction', suggestedDirection);
+      // this.changeDirection(direction);
+      // this.simulateKeyPress(suggestedDirection);
+      // this.changeDirection(suggestedDirection);
 
-    const result = animate(this.state);
-    // console.log('result', result);
-    const randomDirection = Math.floor(Math.random() * 4);
-    if (randomDirection !== player.direction) {
-      this.state.suggestedDirection = randomDirection;
-    }
-    console.log('suggestedDirection', this.state.suggestedDirection);
+      const result = animate(this.state);
+      // console.log('result', result);
+  
+      this.state.suggestedDirection = suggestedDirection;
+    
 
-    this.setState({
-      ...result,
-    });
+      this.setState({
+        ...result,
+      });
 
-    testing();
+
 
     clearTimeout(this.timers.animate);
     this.timers.animate = setTimeout(() => this.step(), 20);

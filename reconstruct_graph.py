@@ -33,6 +33,7 @@ tracks = [
 ]
 
 rows = len(tracks)
+print(rows)
 cols = 26  
 grid = [[0 for _ in range(cols)] for _ in range(rows)]
 
