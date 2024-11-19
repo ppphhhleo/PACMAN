@@ -3,10 +3,10 @@ import { adjacencyList } from './adjacency_list.js';
 
 
 const directions = [
-    { direction: 'NORTH', delta: [0, -1], value: 1 },
-    { direction: 'SOUTH', delta: [0, 1], value: 3 },
-    { direction: 'WEST', delta: [-1, 0], value: 2 },
-    { direction: 'EAST', delta: [1, 0], value: 0 },
+    { direction: 'NORTH', delta: [1, 0], value: 1 },
+    { direction: 'SOUTH', delta: [-1, 0], value: 3 },
+    { direction: 'WEST', delta: [0, -1], value: 2 },
+    { direction: 'EAST', delta: [0, 1], value: 0 },
   ];
   
 class PriorityQueue {
@@ -82,7 +82,7 @@ function dijkstra(adjacencyList, startNode, endNode) {
     return { distance: distances[endNode], path };
 }
 
-function convertToNode(position) {
+export function convertToNode(position) {
     const x = Math.floor(position[1]);
     const y = Math.floor(position[0]);
     return `${x},${y}`;
@@ -116,14 +116,20 @@ export function bigFoodStrategy(start_string, food) {
         return null; 
     }
 
-    const closestNodeString = closestPath[1];
+    let closestNodeString;
+    if (closestPath.length > 1) {
+        closestNodeString = closestPath[1];
+    } else {
+        closestNodeString = closestPath[0]
+    }
 
 
 
     const [targetX, targetY] = closestNodeString.split(',').map(Number);
     const [startX, startY] = start_string.split(',').map(Number);
 
-
+    console.log("target", targetX, targetY)
+    console.log("start", startX, startY)
     const deltaX = targetX - startX; 
     const deltaY = targetY - startY; 
     console.log([deltaX, deltaY])
@@ -141,32 +147,35 @@ export function findNextDecisionPoint(start, direction) {
     }
     const [dx, dy] = directionInfo.delta;
 
-    let current = start;
+
+    let current = convertToNode(start);
 
     while (true) {
-        const current_string = convertToNode(current) 
+        const current_string = current;
         const neighbors = adjacencyList[current_string];
         if (!neighbors) {
-            console.error(`No neighbors found for ${current}`);
+            console.error(`No neighbors found for ${current_string}`);
             return null; 
         }
 
-        if (neighbors.length >= 2) {
+        if (neighbors.length > 2) {
+            console.log(adjacencyList)
             return current_string; 
         }
 
         const next = neighbors.find(neighbor => {
             const [nx, ny] = neighbor.split(',').map(Number);
             const [current_x, current_y] = current_string.split(',').map(Number);
-            return nx === current_x + dx && ny === current_y + dy;
+ 
+            return nx === current_x + dy && ny === current_y + dx;
         });
 
 
         if (!next) {
-            console.error(`No valid next node in direction: ${direction}`);
-            return null;
+            return current;
         }
-        current = next.split(',').map(Number);
+
+        current = next
     }
 
 }

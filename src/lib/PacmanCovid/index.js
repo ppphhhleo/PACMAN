@@ -117,38 +117,38 @@ export default class PacmanCovid extends Component {
     return -nearestBigFood * 2 - nearestSmallFood + narestMonster * 2;
   }
 
-findBestDirection(player, food, monsters, track) {
-  const directions = [
-    { direction: 'NORTH', delta: [0, -1], value: 1 },
-    { direction: 'SOUTH', delta: [0, 1], value: 3 },
-    { direction: 'WEST', delta: [-1, 0], value: 2 },
-    { direction: 'EAST', delta: [1, 0], value: 0 },
-  ];
+// findBestDirection(player, food, monsters, track) {
+//   const directions = [
+//     { direction: 'NORTH', delta: [0, -1], value: 1 },
+//     { direction: 'SOUTH', delta: [0, 1], value: 3 },
+//     { direction: 'WEST', delta: [-1, 0], value: 2 },
+//     { direction: 'EAST', delta: [1, 0], value: 0 },
+//   ];
 
-  const gridSize = [track[0].length, track[1].length];
-  let bestDirectionValue = player.direction;
-  let bestScore = -Infinity;
+//   const gridSize = [track[0].length, track[1].length];
+//   let bestDirectionValue = player.direction;
+//   let bestScore = -Infinity;
 
-  directions.forEach(({ delta, value }) => {
-    const newPosition = [
-      player.position[0] + delta[0],
-      player.position[1] + delta[1],
-    ];
+//   directions.forEach(({ delta, value }) => {
+//     const newPosition = [
+//       player.position[0] + delta[0],
+//       player.position[1] + delta[1],
+//     ];
 
-    if (this.isValidMove(newPosition, gridSize, monsters, track)) {
-      const score = this.heuristic(newPosition, food, monsters);
+//     if (this.isValidMove(newPosition, gridSize, monsters, track)) {
+//       const score = this.heuristic(newPosition, food, monsters);
 
-      // Tiebreaker: prioritize current direction and proximity to food
-      if (score > bestScore || 
-         (score === bestScore && value === player.direction)) {
-        bestScore = score;
-        bestDirectionValue = value;
-      }
-    }
-  });
+//       // Tiebreaker: prioritize current direction and proximity to food
+//       if (score > bestScore || 
+//          (score === bestScore && value === player.direction)) {
+//         bestScore = score;
+//         bestDirectionValue = value;
+//       }
+//     }
+//   });
 
-  return bestDirectionValue;
-}
+//   return bestDirectionValue;
+// }
 
 
   step() {
@@ -161,7 +161,7 @@ findBestDirection(player, food, monsters, track) {
 
     // const suggestedDirection = this.findBestDirection(player, food, monsters, tracks);
       const position = findNextDecisionPoint(player.position, player.direction)
-      console.log("AWD", position)
+  
     
       const suggestedDirection = bigFoodStrategy(position, food);
       // console.log(suggestedDirection)
