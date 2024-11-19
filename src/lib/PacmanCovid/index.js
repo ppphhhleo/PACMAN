@@ -14,6 +14,8 @@ import { bigFoodStrategy, findNextDecisionPoint } from "./ai";
 import tracks from "./game/tracks";
 import { adjacencyList } from "./adjacency_list";
 
+let next_direction = 0;
+let strategy_used = "Eat food"
 
 export default class PacmanCovid extends Component {
   constructor(props) {
@@ -155,46 +157,22 @@ export default class PacmanCovid extends Component {
 
     const { player, food, monsters } = this.state;
 
-    // console.log('player', player);
-    // console.log('food', food);
-    // console.log('monsters', monsters);
-
-
-    // const suggestedDirection = this.findBestDirection(player, food, monsters, tracks);
       const position = findNextDecisionPoint(player.position, player.direction)
-  
-    
       const suggestedDirection = bigFoodStrategy(position, food);
-      // console.log(suggestedDirection)
-      // console.log('direction', direction);
-      // console.log('player direction', player.direction, 'next direction', suggestedDirection);
-      // this.changeDirection(direction);
-      // this.simulateKeyPress(suggestedDirection);
-      // this.changeDirection(suggestedDirection);
+      const current_direction = player.direction;
+      strategy_used = "Eat Big Food";
+      if (suggestedDirection !== current_direction) {
+        next_direction = suggestedDirection;
+      }
+
 
       const result = animate(this.state);
-      // console.log('result', result);
-  
-      this.state.suggestedDirection = suggestedDirection;
-      
-    
-
       this.setState({
         ...result,
       });
-      console.log("this state", this.state.suggestedDirection)
-
-
-
-
-    testing();
-    const randomDirection = Math.floor(Math.random() * 4);
-    if (randomDirection !== this.state.player.direction) {
-      this.state.suggestedDirection = randomDirection;
-    }
-    console.log('suggestedDirection', this.state.suggestedDirection);
+      console.log("this state suggestedDirectionß", this.state.suggestedDirection)
+    // console.log('suggestedDirection', this.state.suggestedDirection);
     
-
     clearTimeout(this.timers.animate);
     this.timers.animate = setTimeout(() => this.step(), 20);
   }
@@ -222,7 +200,10 @@ export default class PacmanCovid extends Component {
       return <h1>Something went wrong.</h1>;
     }
 
-    console.log('RENDERsuggestedDirection', this.state.suggestedDirection);
+    // const { player, food, monsters_ } = this.state;
+    // const position = findNextDecisionPoint(player.position, player.direction)
+    // const suggestedDirection = bigFoodStrategy(position, food);
+    // next_direction = suggestedDirection;
     const props = { gridSize: 12, ...this.props };
 
     const monsters = this.state.monsters.map(({ id, ...monster }) => (
@@ -232,7 +213,7 @@ export default class PacmanCovid extends Component {
     return (
       <div className="wrapper-container">
         <Stage {...props} />
-        <TopBar score={this.state.score} lost={this.state.lost} />
+        <TopBar score={this.state.score} lost={this.state.lost} strategy={strategy_used}/>
         <AllFood {...props} food={this.state.food} />
         {monsters}
         <Player
@@ -241,7 +222,7 @@ export default class PacmanCovid extends Component {
           lost={this.state.lost}
           isRunning={this.props.isRunning}
           onEnd={this.handleTheEnd}
-          suggestedDirection={this.state.suggestedDirection}
+          suggestedDirection={next_direction}
         />
         <Dialog
           open={this.state.isShowDialog}
