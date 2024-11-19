@@ -159,6 +159,7 @@ export default class PacmanCovid extends Component {
     // console.log('food', food);
     // console.log('monsters', monsters);
 
+
     // const suggestedDirection = this.findBestDirection(player, food, monsters, tracks);
       const position = findNextDecisionPoint(player.position, player.direction)
   
@@ -182,9 +183,17 @@ export default class PacmanCovid extends Component {
         ...result,
       });
       console.log("this state", this.state.suggestedDirection)
- 
 
 
+
+
+    testing();
+    const randomDirection = Math.floor(Math.random() * 4);
+    if (randomDirection !== this.state.player.direction) {
+      this.state.suggestedDirection = randomDirection;
+    }
+    console.log('suggestedDirection', this.state.suggestedDirection);
+    
 
     clearTimeout(this.timers.animate);
     this.timers.animate = setTimeout(() => this.step(), 20);
@@ -213,6 +222,7 @@ export default class PacmanCovid extends Component {
       return <h1>Something went wrong.</h1>;
     }
 
+    console.log('RENDERsuggestedDirection', this.state.suggestedDirection);
     const props = { gridSize: 12, ...this.props };
 
     const monsters = this.state.monsters.map(({ id, ...monster }) => (
