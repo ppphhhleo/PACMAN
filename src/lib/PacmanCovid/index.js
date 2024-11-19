@@ -175,11 +175,14 @@ export default class PacmanCovid extends Component {
       // console.log('result', result);
   
       this.state.suggestedDirection = suggestedDirection;
+      
     
 
       this.setState({
         ...result,
       });
+      console.log("this state", this.state.suggestedDirection)
+ 
 
 
 

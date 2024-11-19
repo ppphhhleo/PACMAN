@@ -167,6 +167,8 @@ export default class Player extends Component {
   // }
   render() {
     const { gridSize, lost, position, direction, suggestedDirection } = this.props;
+    console.log("prop state", this.state.suggestedDirection)
+
   
     const pathProps = {
       stroke: 'none',
@@ -195,6 +197,7 @@ export default class Player extends Component {
       3: { x: 0, y: arrowSize }   // SOUTH
     };
     const arrowDirection = arrowDirectionMap[suggestedDirection % 4] || { x: 0, y: 0 };
+
 
     return (
       <svg className="pacmancovid-player" style={style}>
