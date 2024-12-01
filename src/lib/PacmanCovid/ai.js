@@ -99,6 +99,7 @@ export function bigFoodStrategy(start_string, food) {
 
     let closestPath = null;
     let minDistance = Infinity;
+    let suggestedPath = null;
 
     for (let foodItem of bigFood) {
         const big_food_position_string = convertToNode(foodItem.position);
@@ -127,16 +128,11 @@ export function bigFoodStrategy(start_string, food) {
 
     const [targetX, targetY] = closestNodeString.split(',').map(Number);
     const [startX, startY] = start_string.split(',').map(Number);
-
-    console.log("target", targetX, targetY)
-    console.log("start", startX, startY)
     const deltaX = targetX - startX; 
     const deltaY = targetY - startY; 
-    console.log([deltaX, deltaY])
-    console.log(findDirectionByDelta([deltaX, deltaY]))
+    suggestedPath = closestPath.map(position => position.split(',').map(Number));
 
-
-    return findDirectionByDelta([deltaX, deltaY]);
+    return { direction: findDirectionByDelta([deltaX, deltaY]), path: suggestedPath };
 }
 
 export function findNextDecisionPoint(start, direction) {

@@ -16,6 +16,7 @@ import { adjacencyList } from "./adjacency_list";
 
 let next_direction = 0;
 let strategy_used = "Eat food"
+let suggestedPath = null;
 
 export default class PacmanCovid extends Component {
   constructor(props) {
@@ -158,13 +159,15 @@ export default class PacmanCovid extends Component {
     const { player, food, monsters } = this.state;
 
       const position = findNextDecisionPoint(player.position, player.direction)
-      const suggestedDirection = bigFoodStrategy(position, food);
+      const { direction: suggestedDirection, path: djikstraPath } = bigFoodStrategy(position, food);
       const current_direction = player.direction;
       strategy_used = "Eat Big Food";
       if (suggestedDirection !== current_direction) {
         next_direction = suggestedDirection;
       }
-
+      // console.log("suggestedPath", suggestedPath)
+      suggestedPath = djikstraPath;
+      console.log("suggestedPath", suggestedPath)
 
       const result = animate(this.state);
       this.setState({
@@ -209,12 +212,13 @@ export default class PacmanCovid extends Component {
     const monsters = this.state.monsters.map(({ id, ...monster }) => (
       <Monster key={id} {...props} {...monster} />
     ));
+    // console.log("suggestedPath render", suggestedPath)
 
     return (
       <div className="wrapper-container">
         <Stage {...props} />
         <TopBar score={this.state.score} lost={this.state.lost} strategy={strategy_used}/>
-        <AllFood {...props} food={this.state.food} />
+        <AllFood {...props} food={this.state.food} paths={suggestedPath} />
         {monsters}
         <Player
           {...props}
