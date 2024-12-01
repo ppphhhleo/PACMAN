@@ -28,9 +28,9 @@ function BigFood(props) {
 
 export default function Food({ gridSize, position, eaten, big, path }) {
   // TODO - remover biblioteca 'classnames'
+  // console.log("eaten", eaten)
   const isPathDot = path ? path.some(pos => pos[0] === position[1] && pos[1] === position[0]) : false;
-
-  const className = classNames('food', { eaten, big, path: isPathDot });
+  const className = classNames('food', {eaten: eaten, big, path: isPathDot });
 
   const style = cssPosition(position, gridSize);
 

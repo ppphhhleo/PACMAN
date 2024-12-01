@@ -4,11 +4,15 @@ import Food from '../';
 import './style.scss';
 
 export default function AllFood({ food, paths, ...props }) {
-    // console.log("paths allFood", paths)
-    const items = food.filter(({ eaten }) => !eaten)
-        .map(({ key, ...item }) => (
-            <Food key={key} {...item} path={paths} {...props} />
-        ));
+
+    const items =food.map(({ key, ...item }) => (
+        <Food key={key} {...item} path={paths} {...props} />
+    ));
+
+    // const items = food.filter(({ eaten }) => !eaten)
+    //     .map(({ key, ...item }) => (
+    //         <Food key={key} {...item} path={paths} {...props} />
+    //     ));
 
     return (
         <div className="food-all">

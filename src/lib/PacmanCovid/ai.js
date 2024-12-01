@@ -8,7 +8,6 @@ const directions = [
     { direction: 'WEST', delta: [0, -1], value: 2 },
     { direction: 'EAST', delta: [0, 1], value: 0 },
   ];
-
 class PriorityQueue {
     constructor() {
         this.elements = [];
@@ -90,7 +89,7 @@ export function convertToNode(position) {
 
 function findDirectionByDelta(delta) {
     const result = directions.find(d => d.delta[0] === delta[0] && d.delta[1] === delta[1]);
-    return result ? result.value : null;
+    return result ? result.value : null; 
 }
 
 export function bigFoodStrategy(start_string, food) {
@@ -133,6 +132,9 @@ export function bigFoodStrategy(start_string, food) {
         deltaX === 0 ? 0 : deltaX > 0 ? 1 : -1
     ];
     const nextDirection = findDirectionByDelta(delta);
+    console.log("nextDirection", nextDirection)
+    console.log("start_string", start_string)
+    console.log("target", closestNodeString)
     suggestedPath = closestPath.map(position => position.split(',').map(Number));
 
     return { direction: nextDirection, path: suggestedPath };

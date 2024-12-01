@@ -18,6 +18,13 @@
     background-color: transparent;
   }
 }
+
+.eaten {
+  background-color: rgb(0, 0, 0);
+  opacity: 0.7;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+}
+
 .path {
   display: block;
   position: absolute;
