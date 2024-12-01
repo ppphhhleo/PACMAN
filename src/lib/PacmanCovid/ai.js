@@ -8,7 +8,7 @@ const directions = [
     { direction: 'WEST', delta: [0, -1], value: 2 },
     { direction: 'EAST', delta: [0, 1], value: 0 },
   ];
-  
+
 class PriorityQueue {
     constructor() {
         this.elements = [];
@@ -90,7 +90,7 @@ export function convertToNode(position) {
 
 function findDirectionByDelta(delta) {
     const result = directions.find(d => d.delta[0] === delta[0] && d.delta[1] === delta[1]);
-    return result ? result.value : null; 
+    return result ? result.value : null;
 }
 
 export function bigFoodStrategy(start_string, food) {
@@ -124,15 +124,18 @@ export function bigFoodStrategy(start_string, food) {
         closestNodeString = closestPath[0]
     }
 
-
-
-    const [targetX, targetY] = closestNodeString.split(',').map(Number);
-    const [startX, startY] = start_string.split(',').map(Number);
+    const [targetY, targetX] = closestNodeString.split(',').map(Number);
+    const [startY, startX] = start_string.split(',').map(Number);
     const deltaX = targetX - startX; 
-    const deltaY = targetY - startY; 
+    const deltaY = targetY - startY;
+    const delta = [
+        deltaY === 0 ? 0 : deltaY > 0 ? 1 : -1,
+        deltaX === 0 ? 0 : deltaX > 0 ? 1 : -1
+    ];
+    const nextDirection = findDirectionByDelta(delta);
     suggestedPath = closestPath.map(position => position.split(',').map(Number));
 
-    return { direction: findDirectionByDelta([deltaX, deltaY]), path: suggestedPath };
+    return { direction: nextDirection, path: suggestedPath };
 }
 
 export function findNextDecisionPoint(start, direction) {
