@@ -8,7 +8,6 @@ const directions = [
     { direction: 'WEST', delta: [0, -1], value: 2 },
     { direction: 'EAST', delta: [0, 1], value: 0 },
   ];
-  
 class PriorityQueue {
     constructor() {
         this.elements = [];
@@ -99,6 +98,7 @@ export function bigFoodStrategy(start_string, food) {
 
     let closestPath = null;
     let minDistance = Infinity;
+    let suggestedPath = null;
 
     for (let foodItem of bigFood) {
         const big_food_position_string = convertToNode(foodItem.position);
@@ -123,20 +123,21 @@ export function bigFoodStrategy(start_string, food) {
         closestNodeString = closestPath[0]
     }
 
-
-
-    const [targetX, targetY] = closestNodeString.split(',').map(Number);
-    const [startX, startY] = start_string.split(',').map(Number);
-
-    console.log("target", targetX, targetY)
-    console.log("start", startX, startY)
+    const [targetY, targetX] = closestNodeString.split(',').map(Number);
+    const [startY, startX] = start_string.split(',').map(Number);
     const deltaX = targetX - startX; 
-    const deltaY = targetY - startY; 
-    console.log([deltaX, deltaY])
-    console.log(findDirectionByDelta([deltaX, deltaY]))
+    const deltaY = targetY - startY;
+    const delta = [
+        deltaY === 0 ? 0 : deltaY > 0 ? 1 : -1,
+        deltaX === 0 ? 0 : deltaX > 0 ? 1 : -1
+    ];
+    const nextDirection = findDirectionByDelta(delta);
+    console.log("nextDirection", nextDirection)
+    console.log("start_string", start_string)
+    console.log("target", closestNodeString)
+    suggestedPath = closestPath.map(position => position.split(',').map(Number));
 
-
-    return findDirectionByDelta([deltaX, deltaY]);
+    return { direction: nextDirection, path: suggestedPath };
 }
 
 export function findNextDecisionPoint(start, direction) {

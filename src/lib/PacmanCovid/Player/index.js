@@ -4,7 +4,7 @@ import { PLAYER_RADIUS } from '../constants';
 import { cssPosition } from '../helpers';
 import './style.scss';
 
-const ANIMATION_SPEED = 30;
+const ANIMATION_SPEED = 10;
 const initialState = {
   angle: 1,
   timerBite: null,
