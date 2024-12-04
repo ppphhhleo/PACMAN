@@ -108,7 +108,7 @@ export default function MLTrain({ webcamRef }) {
                     confidence: parseFloat(confidence.toFixed(3)),
                     },
                 ]);
-                console.log("Image added to array with confidence:", confidence);
+                console.log("Image added to array with confidence:", prediction, newImageSrc);
             }
             await new Promise((resolve) => setTimeout(resolve, 250));
         }

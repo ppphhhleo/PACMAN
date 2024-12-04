@@ -1,10 +1,46 @@
-import { imgAddedSrcArrAtom } from "../GlobalState";
+import { imgAddedSrcArrAtom, imgSrcArrAtom } from "../GlobalState";
 import { useAtom } from "jotai";
 import React from "react";
-import { Box, Grid } from "@mui/material";
+import { Grid, Button, Box } from "@mui/material";
+import {
+    ArrowUpward,
+    ArrowDownward,
+    ArrowBack,
+    ArrowForward,
+} from "@mui/icons-material/";
+
+const DIRECTIONS = {
+    up: { icon: <ArrowUpward />, label: "Up" },
+    down: { icon: <ArrowDownward />, label: "Down" },
+    left: { icon: <ArrowBack />, label: "Left" },
+    right: { icon: <ArrowForward />, label: "Right" },
+};
 
 export default function LowConfidenceImagesDisplay() {
-    const [imgAddedSrcArr] = useAtom(imgAddedSrcArrAtom);
+    const [imgAddedSrcArr, setImgAddedSrcArr] = useAtom(imgAddedSrcArrAtom);
+    const [imgSrcArr, setImgSrcArr] = useAtom(imgSrcArrAtom);
+
+    const handleLabelImage = (index, direction) => {
+        setImgAddedSrcArr((prev) =>
+            prev.map((imgData, idx) =>
+                idx === index ? { ...imgData, label: direction } : imgData
+            )
+        );
+    };
+
+    const handleAddToTrainingData = (index) => {
+        const imgData = imgAddedSrcArr[index];
+        if (imgData.label) {
+            setImgSrcArr((prev) => [...prev, imgData]); // Add to training data
+            handleDeleteImage(index); // Remove from display
+        } else {
+            alert("Please label the image before adding to training data.");
+        }
+    };
+
+    const handleDeleteImage = (index) => {
+        setImgAddedSrcArr((prev) => prev.filter((_, idx) => idx !== index));
+    };
 
     return (
         <Grid container spacing={2}>
@@ -33,16 +69,65 @@ export default function LowConfidenceImagesDisplay() {
             ) : (
                 imgAddedSrcArr.map((imgData, index) => (
                     <Grid item xs={3} key={index}>
-                        <Box textAlign="center">
+                        <Box
+                            textAlign="center"
+                            sx={{
+                                border: "1px solid #ccc",
+                                padding: "10px",
+                                borderRadius: "5px",
+                                backgroundColor: "#f9f9f9",
+                            }}
+                        >
                             <img
                                 height={"100px"}
                                 src={imgData.src}
-                                alt={`Low confidence label: ${imgData.label}`}
+                                alt={`Prediction: ${imgData.label}`}
                                 style={{ border: "1px solid #ccc", padding: "5px" }}
                             />
                             <p style={{ fontSize: "12px", marginTop: "5px" }}>
-                                Label: {imgData.label}
+                                Prediction: {imgData.label || "Unlabeled"}
                             </p>
+                            <p style={{ fontSize: "12px", marginTop: "5px" }}>
+                                Confidence: {imgData.confidence}
+                            </p>
+                            <Box>
+                                {/* Direction Buttons */}
+                                {Object.keys(DIRECTIONS).map((directionKey) => {
+                                    const direction = DIRECTIONS[directionKey];
+                                    return (
+                                        <Button
+                                            key={directionKey}
+                                            size="small"
+                                            variant="outlined"
+                                            endIcon={direction.icon}
+                                            onClick={() => handleLabelImage(index, directionKey)}
+                                            sx={{ margin: "2px" }}
+                                        >
+                                            {/* {direction.label} */}
+                                        </Button>
+                                    );
+                                })}
+                            </Box>
+                            <Box sx={{ marginTop: "5px" }}>
+                                <Button
+                                    size="small"
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={() => handleAddToTrainingData(index)}
+                                    sx={{ margin: "2px" }}
+                                >
+                                    Add to Training Data
+                                </Button>
+                                <Button
+                                    size="small"
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={() => handleDeleteImage(index)}
+                                    sx={{ margin: "2px" }}
+                                >
+                                    Delete
+                                </Button>
+                            </Box>
                         </Box>
                     </Grid>
                 ))
