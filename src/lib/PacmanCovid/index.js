@@ -253,8 +253,7 @@ export default class PacmanCovid extends Component {
         >
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              <p>You have been infected! </p>
-              <p> Score: {this.state.score}</p>
+              <p style={{fontSize: 15, textAlign: "center"}}>Your Game Score is {this.state.score}! </p>
             </DialogContentText>
             <LowConfidenceImagesDisplay />
           </DialogContent>

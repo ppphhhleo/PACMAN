@@ -53,12 +53,16 @@ export default function LowConfidenceImagesDisplay() {
 
     return (
         <Box>
-            <Typography variant="h6" color="text.primary" gutterBottom>
-                Low Confidence Images
+            <Typography variant="h6" color="text.primary" gutterBottom textAlign="center">
+            Before Next Game...
             </Typography>
-            Model has less confidence in these images below as it is confused by the subtle differences between images.
-            Please relabel some images in expected directions so that the model can learn to distinguish between them.
-            Retrain the model after labeling enough images.
+            <Typography variant="body1" color="text.primary" gutterBottom marginBottom={2} textAlign="center">
+                Model has Low Confidence in images below as it is confused by the subtle differences between images.
+                <br />
+                - Please <b>Relabel</b> images in expected directions for model to learn.
+                <br />
+                - Please <b>Retrain</b> the model after relabeling and adding images for training.
+            </Typography>
 
             {imgAddedSrcArr.length === 0 ? (
                 <Box
@@ -88,6 +92,9 @@ export default function LowConfidenceImagesDisplay() {
                                     overflow: "hidden",
                                     boxShadow: 1,
                                     backgroundColor: "#ffffff", // Highlight relabeled images
+                                    marginBottom: 2,
+                                    marginLeft: 2,
+                                    marginRight: 2,
                                 }}
                             >
                                 <CardContent sx={{ padding: 1 }}>
@@ -120,14 +127,14 @@ export default function LowConfidenceImagesDisplay() {
                                     <Typography
                                         variant="body2"
                                         color="text.secondary"
-                                        sx={{ textAlign: "center", fontSize: "18px" }}
+                                        sx={{ textAlign: "center", fontSize: "18px", marginBottom: 1}}
                                     >
                                         New Label: {imgData.label || "No new label"}
                                     </Typography>
                                     <Box
                                         display="flex"
                                         justifyContent="space-between"
-                                        marginBottom={1}
+                                        marginBottom={2}
                                     >
                                         {Object.keys(DIRECTIONS).map((directionKey) => {
                                             const direction = DIRECTIONS[directionKey];
@@ -165,7 +172,7 @@ export default function LowConfidenceImagesDisplay() {
                                             onClick={() => handleAddToTrainingData(index)}
                                             startIcon={<AddIcon />}
                                         >
-                                            Add to Training
+                                            Add to Train
                                         </Button>
                                         <Button
                                             size="small"
