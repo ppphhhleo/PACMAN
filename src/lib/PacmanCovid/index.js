@@ -9,7 +9,7 @@ import TopBar from "./TopBar";
 import AllFood from "./Food/All";
 import Monster from "./Monster";
 import Player from "./Player";
-import { bigFoodStrategy, findNextDecisionPoint } from "./ai";
+import { bigFoodStrategy, findNextDecisionPoint, monsterStrategy, testing } from "./ai";
 
 import tracks from "./game/tracks";
 import { adjacencyList } from "./adjacency_list";
@@ -156,10 +156,18 @@ export default class PacmanCovid extends Component {
 
   step() {
 
-    const { player, food, monsters } = this.state;
-
-      const position = findNextDecisionPoint(player.position, player.direction)
-      const { direction: suggestedDirection, path: djikstraPath } = bigFoodStrategy(position, food);
+      const { player, food, monsters } = this.state;
+      testing(player)
+      let suggestedDirection, djikstraPath;
+      if (monsters[0].eatingTime != 0 || monsters[1].eatingTime != 0 || monsters[2].eatingTime != 0 || monsters[3].eatingTime != 0) {
+        ({ direction: suggestedDirection, path: djikstraPath } = monsterStrategy(player, monsters))
+      }
+      else {
+        ({ direction: suggestedDirection, path: djikstraPath } = bigFoodStrategy(player, food));
+        
+      }
+    
+      
       const current_direction = player.direction;
       strategy_used = "Eat Big Food";
       if (suggestedDirection !== current_direction) {
