@@ -104,7 +104,8 @@ export default function MLTrain({ webcamRef }) {
                 ...prev,
                 {
                     src: newImageSrc,
-                    label: prediction,
+                    prediction: prediction,
+                    label: null,
                     confidence: parseFloat(confidence.toFixed(3)),
                     },
                 ]);
