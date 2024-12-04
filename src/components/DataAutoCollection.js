@@ -115,7 +115,6 @@ export default function LowConfidenceImagesDisplay() {
                                     >
                                         Label: {imgData.label || "No new label"}
                                     </Typography>
-
                                     <Box
                                         display="flex"
                                         justifyContent="space-between"
