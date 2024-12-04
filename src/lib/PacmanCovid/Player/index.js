@@ -167,7 +167,7 @@ export default class Player extends Component {
   // }
   render() {
     const { gridSize, lost, position, direction, suggestedDirection } = this.props;
-    console.log("prop state", this.state.suggestedDirection)
+    // console.log("prop state", this.state.suggestedDirection)
   
     const pathProps = {
       stroke: 'none',

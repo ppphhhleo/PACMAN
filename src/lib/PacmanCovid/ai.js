@@ -103,12 +103,7 @@ export function bigFoodStrategy(player, food) {
 
     for (let foodItem of bigFood) {
         const big_food_position_string = convertToNode(foodItem.position);
-
-
-   
         const { distance, path } = dijkstra(adjacencyList, start_string, big_food_position_string);
-        
-
         if (distance < minDistance) {
             minDistance = distance;
             closestPath = path;
@@ -135,11 +130,52 @@ export function bigFoodStrategy(player, food) {
         deltaX === 0 ? 0 : deltaX > 0 ? 1 : -1
     ];
     const nextDirection = findDirectionByDelta(delta);
-    console.log("nextDirection", nextDirection)
-    console.log("start_string", start_string)
-    console.log("target", closestNodeString)
+    // console.log("nextDirection", nextDirection)
+    // console.log("start_string", start_string)
+    // console.log("target", closestNodeString)
     suggestedPath = closestPath.map(position => position.split(',').map(Number));
 
+    return { direction: nextDirection, path: suggestedPath };
+}
+
+export function testMonsterStrategy(player, monsters) {
+    const start_string = findNextDecisionPoint(player.position, player.direction)
+    const liveMonsters = monsters.filter(monster => monster.deadTime === 0);
+    let closestPath = null;
+    let minDistance = Infinity;
+    let suggestedPath = null;
+
+    for (let monster of liveMonsters) {
+        const monster_position_string = convertToNode(monster.position);
+        const { distance, path } = dijkstra(adjacencyList, start_string, monster_position_string);
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestPath = path;
+        }
+    }
+
+    if (!closestPath || closestPath.length === 0) {
+        return null; 
+    }
+
+    let closestNodeString;
+    if (closestPath.length > 1) {
+        closestNodeString = closestPath[1];
+    } else {
+        closestNodeString = closestPath[0]
+    }
+
+    const [targetY, targetX] = closestNodeString.split(',').map(Number);
+    const [startY, startX] = start_string.split(',').map(Number);
+    const deltaX = targetX - startX; 
+    const deltaY = targetY - startY;
+    const delta = [
+        deltaY === 0 ? 0 : deltaY > 0 ? 1 : -1,
+        deltaX === 0 ? 0 : deltaX > 0 ? 1 : -1
+    ];
+    const nextDirection = findDirectionByDelta(delta);
+    suggestedPath = closestPath.map(position => position.split(',').map(Number));
+    
     return { direction: nextDirection, path: suggestedPath };
 }
 
@@ -150,13 +186,9 @@ export function monsterStrategy(player, monsters) {
     let minDistance = Infinity;
     let nearestMonster;
 
-
-
     monsters.forEach(monster => {
         const distance = Math.abs(monster.position[0] - player.position[0]) +
                          Math.abs(monster.position[1] - player.position[1]);
-   
-      
         if (distance < minDistance) {
           minDistance = distance;
           nearestMonster = monster.position;
@@ -164,9 +196,6 @@ export function monsterStrategy(player, monsters) {
       });
 
     const validCoordinate = convertToNode(nearestMonster)
-      
-
-     
 
     if (!validCoordinate) {
         console.log("No valid coordinate found for nearest monster in adjacency list.");
@@ -177,7 +206,6 @@ export function monsterStrategy(player, monsters) {
     const { distance, closestPath } = dijkstra(adjacencyList, start_string, validCoordinate);
     console.log("validcoor", validCoordinate)
 
-    
     
     console.log("CAWEE", distance, closestPath)
     if (closestPath === null) {
@@ -239,7 +267,7 @@ export function findNextDecisionPoint(start, direction) {
         }
 
         if (neighbors.length > 2) {
-            console.log(adjacencyList)
+            // console.log(adjacencyList)
             return current_string; 
         }
 

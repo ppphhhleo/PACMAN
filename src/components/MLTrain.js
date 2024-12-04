@@ -21,6 +21,7 @@ import {
     hiddenUnitsAtom,
     stopTrainingAtom,
     imgSrcArrAtom,
+    imgAddedSrcArrAtom,
     gameRunningAtom,
     predictionAtom,
 } from "../GlobalState";
@@ -70,6 +71,9 @@ export default function MLTrain({ webcamRef }) {
     const [truncatedMobileNet] = useAtom(truncatedMobileNetAtom);
     const [imgSrcArr] = useAtom(imgSrcArrAtom);
 
+    // ---- Captured Images ----
+    const [imgAddedSrcArr, setImgAddedSrcArr] = useAtom(imgAddedSrcArrAtom);
+
     // ---- UI Display ----
     const [lossVal, setLossVal] = useAtom(lossAtom);
     const [trainingProgress, setTrainingProgress] = useAtom(trainingProgressAtom);
@@ -91,9 +95,21 @@ export default function MLTrain({ webcamRef }) {
     // Loop to predict direction
     async function runPredictionLoop() {
         while (isRunningRef.current) {
-            setPredictionDirection(
-                await predictDirection(webcamRef, truncatedMobileNet, model)
-            );
+            const {prediction, confidence, newImageSrc} = await predictDirection(webcamRef, truncatedMobileNet, model)
+            // console.log("newImageSrc", newImageSrc)
+            setPredictionDirection(prediction);
+            if (confidence < 0.7 && newImageSrc !== null) {
+            // Use the updater function pattern to avoid stale state issues
+            setImgAddedSrcArr((prev) => [
+                ...prev,
+                {
+                    src: newImageSrc,
+                    label: prediction,
+                    confidence: parseFloat(confidence.toFixed(3)),
+                    },
+                ]);
+                console.log("Image added to array with confidence:", prediction, newImageSrc);
+            }
             await new Promise((resolve) => setTimeout(resolve, 250));
         }
     }
