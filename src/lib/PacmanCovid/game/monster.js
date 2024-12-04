@@ -77,7 +77,8 @@ function getIsHome(monster) {
 }
 
 function getAvailableMonsterRoutes({ newPosition, collision, plane, trackTo, monster }) {
-    //return constants.NORTH;
+
+    // return constants.NORTH;
     let availableOptions = [];
     let distanceFromTrack = 0;
 

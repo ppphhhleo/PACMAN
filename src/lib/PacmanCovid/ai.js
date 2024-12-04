@@ -130,9 +130,9 @@ export function bigFoodStrategy(player, food) {
         deltaX === 0 ? 0 : deltaX > 0 ? 1 : -1
     ];
     const nextDirection = findDirectionByDelta(delta);
-    console.log("nextDirection", nextDirection)
-    console.log("start_string", start_string)
-    console.log("target", closestNodeString)
+    // console.log("nextDirection", nextDirection)
+    // console.log("start_string", start_string)
+    // console.log("target", closestNodeString)
     suggestedPath = closestPath.map(position => position.split(',').map(Number));
 
     return { direction: nextDirection, path: suggestedPath };
@@ -267,7 +267,7 @@ export function findNextDecisionPoint(start, direction) {
         }
 
         if (neighbors.length > 2) {
-            console.log(adjacencyList)
+            // console.log(adjacencyList)
             return current_string; 
         }
 

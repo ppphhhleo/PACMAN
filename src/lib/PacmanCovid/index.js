@@ -9,6 +9,8 @@ import TopBar from "./TopBar";
 import AllFood from "./Food/All";
 import Monster from "./Monster";
 import Player from "./Player";
+import LowConfidenceImagesDisplay from "../../components/DataAutoCollection";
+
 import { bigFoodStrategy, findNextDecisionPoint, monsterStrategy, testing, testMonsterStrategy } from "./ai";
 
 import tracks from "./game/tracks";
@@ -57,7 +59,7 @@ export default class PacmanCovid extends Component {
       this.step();
     }
     if (prevProps.predictions !== this.props.predictions) {
-      console.log("predictions", this.props.predictions);
+      // console.log("predictions", this.props.predictions);
       this.changeDirection(this.props.predictions);
     }
   }
@@ -174,13 +176,13 @@ export default class PacmanCovid extends Component {
       }
       // console.log("suggestedPath", suggestedPath)
       suggestedPath = djikstraPath;
-      console.log("suggestedPath", suggestedPath)
+      // console.log("suggestedPath", suggestedPath)
 
       const result = animate(this.state);
       this.setState({
         ...result,
       });
-      console.log("this state suggestedDirectionß", this.state.suggestedDirection)
+      // console.log("this state suggestedDirection", this.state.suggestedDirection)
     // console.log('suggestedDirection', this.state.suggestedDirection);
     
     clearTimeout(this.timers.animate);
@@ -243,15 +245,17 @@ export default class PacmanCovid extends Component {
             this.setState(getInitialState());
             this.componentDidMount();
           }}
-          // open={true}
+          open={true}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
+          maxWidth="lg"
         >
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               <p>You have been infected! </p>
               <p> Score: {this.state.score}</p>
             </DialogContentText>
+            <LowConfidenceImagesDisplay />
           </DialogContent>
         </Dialog>
       </div>

@@ -12,6 +12,7 @@ import {
     Grid,
     Paper,
 } from "@mui/material";
+import LowConfidenceImagesDisplay from "./components/DataAutoCollection";
 
 export default function App() {
     const webcamRef = React.useRef(null);
@@ -67,6 +68,7 @@ export default function App() {
                             >
                                 <MLTrain webcamRef={webcamRef} />
                             </Paper>
+                            
                         </Grid>
                         {/* Recent Deposits */}
                         <Grid item xs={12} md={6} lg={6}>
@@ -75,6 +77,17 @@ export default function App() {
                             </Paper>
                         </Grid>
                     </Grid>
+                    <Paper
+                        sx={{
+                            p: 2,
+                            display: "flex",
+                            flexDirection: "column",
+                            marginTop: 3,
+                        }}
+                        >
+                        display captured frames here, with buttons to label and add to training data
+                        <LowConfidenceImagesDisplay />
+                    </Paper>
                 </Container>
             </Box>
         </Box>
