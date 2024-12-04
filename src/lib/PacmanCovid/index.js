@@ -57,7 +57,7 @@ export default class PacmanCovid extends Component {
       this.step();
     }
     if (prevProps.predictions !== this.props.predictions) {
-      console.log("predictions", this.props.predictions);
+      // console.log("predictions", this.props.predictions);
       this.changeDirection(this.props.predictions);
     }
   }
@@ -167,13 +167,13 @@ export default class PacmanCovid extends Component {
       }
       // console.log("suggestedPath", suggestedPath)
       suggestedPath = djikstraPath;
-      console.log("suggestedPath", suggestedPath)
+      // console.log("suggestedPath", suggestedPath)
 
       const result = animate(this.state);
       this.setState({
         ...result,
       });
-      console.log("this state suggestedDirectionß", this.state.suggestedDirection)
+      // console.log("this state suggestedDirection", this.state.suggestedDirection)
     // console.log('suggestedDirection', this.state.suggestedDirection);
     
     clearTimeout(this.timers.animate);

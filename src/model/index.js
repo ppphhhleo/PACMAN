@@ -1,6 +1,8 @@
 import * as tf from "@tensorflow/tfjs";
 import { getDefaultStore } from "jotai";
 import { stopTrainingAtom, trainingProgressAtom } from "../GlobalState";
+import { imgAddedSrcArrAtom } from "../GlobalState";
+import { useAtom } from "jotai";
 
 export async function loadTruncatedMobileNet() {
   const mobilenet = await tf.loadLayersModel(
@@ -136,30 +138,39 @@ export async function buildModel(
 export async function predict(truncatedMobileNet, model, img) {
   const embeddings = truncatedMobileNet.predict(img);
   const predictions = await model.predict(embeddings);
+  const confidenceTensor = predictions.as1D().max(); // Get the maximum confidence as a tensor
+  const confidence = (await confidenceTensor.data())[0]; // Extract the raw scalar confidence value
   const predictedClass = predictions.as1D().argMax();
   const classId = (await predictedClass.data())[0];
-  return classId;
+  return { classId: classId, confidence: confidence };
 }
 
 export async function predictDirection(webcamRef, truncatedMobileNet, model) {
   const newImageSrc = webcamRef.current.getScreenshot();
+  let prediction = null;
+  let confidence = null;
   if (newImageSrc) {
     const imgTensor = await base64ToTensor(newImageSrc);
-    const prediction = await predict(truncatedMobileNet, model, imgTensor);
+    const result = await predict(truncatedMobileNet, model, imgTensor);
+    confidence = result.confidence;
 
-    switch (prediction) {
+    switch (result.classId) {
       case 0:
-        return 1;
+        prediction = 1;
+        break;
       case 1:
-        return 3;
+        prediction = 3;
+        break;
       case 2:
-        return 2;
+        prediction = 2;
       case 3:
-        return 0;
+        prediction = 0;
+        break;
       default:
-        return -1;
+        prediction = -1;
     }
   }
+  return {prediction, confidence, newImageSrc}
 }
 
 export async function base64ToTensor(base64) {
