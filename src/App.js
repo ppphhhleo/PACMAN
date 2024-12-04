@@ -68,7 +68,6 @@ export default function App() {
                             >
                                 <MLTrain webcamRef={webcamRef} />
                             </Paper>
-                            
                         </Grid>
                         {/* Recent Deposits */}
                         <Grid item xs={12} md={6} lg={6}>

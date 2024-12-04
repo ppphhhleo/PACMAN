@@ -18,6 +18,13 @@ const DIRECTIONS = {
     right: { icon: <ArrowForward />, label: "Right" },
 };
 
+const directionMap = {
+    1: "UP",
+    3: "DOWN",
+    2: "LEFT",
+    0: "RIGHT",
+};
+
 export default function LowConfidenceImagesDisplay() {
     const [imgAddedSrcArr, setImgAddedSrcArr] = useAtom(imgAddedSrcArrAtom);
     const [imgSrcArr, setImgSrcArr] = useAtom(imgSrcArrAtom);
@@ -46,12 +53,16 @@ export default function LowConfidenceImagesDisplay() {
 
     return (
         <Box>
-            <Typography variant="h6" color="text.primary" gutterBottom>
-                Low Confidence Images
+            <Typography variant="h6" color="text.primary" gutterBottom textAlign="center">
+            Before Next Game...
             </Typography>
-            Model has less confidence in these images below as it is confused by the subtle differences between images.
-            Please relabel some images in expected directions so that the model can learn to distinguish between them.
-            Retrain the model after labeling enough images.
+            <Typography variant="body1" color="text.primary" gutterBottom marginBottom={2} textAlign="center">
+                Model has Low Confidence in images below as it is confused by the subtle differences between images.
+                <br />
+                - Please <b>Relabel</b> images in expected directions for model to learn.
+                <br />
+                - Please <b>Retrain</b> the model after relabeling and adding images for training.
+            </Typography>
 
             {imgAddedSrcArr.length === 0 ? (
                 <Box
@@ -70,15 +81,20 @@ export default function LowConfidenceImagesDisplay() {
                 </Box>
             ) : (
                 <Grid container spacing={2}>
-                    {imgAddedSrcArr.map((imgData, index) => (
-                        <Grid item xs={12} md={6} lg={4} key={index}>
-                            <Card
+                    {imgAddedSrcArr
+                        // .filter((imgData) => imgData.prediction)
+                        .map((imgData, index) => (
+                            <Grid item xs={12} md={6} lg={4} key={index}>
+                                <Card
                                 sx={{
                                     border: "1px solid #ccc",
                                     borderRadius: 2,
                                     overflow: "hidden",
                                     boxShadow: 1,
                                     backgroundColor: "#ffffff", // Highlight relabeled images
+                                    marginBottom: 2,
+                                    marginLeft: 2,
+                                    marginRight: 2,
                                 }}
                             >
                                 <CardContent sx={{ padding: 1 }}>
@@ -97,28 +113,28 @@ export default function LowConfidenceImagesDisplay() {
                                     <Typography
                                         variant="body2"
                                         color="text.secondary"
-                                        sx={{ marginBottom: 1 }}
+                                        sx={{ textAlign: "center", fontSize: "18px" }}
                                     >
-                                        Prediction: {imgData.prediction || "No prediction"}
+                                        Prediction: {directionMap[imgData.prediction] || "No prediction"}
                                     </Typography>
                                     <Typography
                                         variant="body2"
                                         color="text.secondary"
-                                        sx={{ marginBottom: 1 }}
+                                        sx={{ textAlign: "center", fontSize: "18px" }}
                                     >
                                         Confidence: {imgData.confidence}
                                     </Typography>
                                     <Typography
                                         variant="body2"
                                         color="text.secondary"
-                                        sx={{ marginBottom: 1 }}
+                                        sx={{ textAlign: "center", fontSize: "18px", marginBottom: 1}}
                                     >
-                                        Label: {imgData.label || "No new label"}
+                                        New Label: {imgData.label || "No new label"}
                                     </Typography>
                                     <Box
                                         display="flex"
                                         justifyContent="space-between"
-                                        marginBottom={1}
+                                        marginBottom={2}
                                     >
                                         {Object.keys(DIRECTIONS).map((directionKey) => {
                                             const direction = DIRECTIONS[directionKey];
@@ -156,7 +172,7 @@ export default function LowConfidenceImagesDisplay() {
                                             onClick={() => handleAddToTrainingData(index)}
                                             startIcon={<AddIcon />}
                                         >
-                                            Add to Training
+                                            Add to Train
                                         </Button>
                                         <Button
                                             size="small"
