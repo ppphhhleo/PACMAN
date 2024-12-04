@@ -77,7 +77,7 @@ export default function App() {
                                 }}
                             >
                                 display captured frames here, with buttons to label and add to training data
-                                {/* <LowConfidenceImagesDisplay /> */}
+                                <LowConfidenceImagesDisplay />
                             </Paper>
                         </Grid>
                         {/* Recent Deposits */}
