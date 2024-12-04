@@ -85,7 +85,7 @@ export default function App() {
                             marginTop: 3,
                         }}
                         >
-                        display captured frames here, with buttons to label and add to training data
+                        {/* display captured frames here, with buttons to label and add to training data */}
                         <LowConfidenceImagesDisplay />
                     </Paper>
                 </Container>

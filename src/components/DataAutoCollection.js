@@ -49,6 +49,10 @@ export default function LowConfidenceImagesDisplay() {
             <Typography variant="h6" color="text.primary" gutterBottom>
                 Low Confidence Images
             </Typography>
+            Model has less confidence in these images below as it is confused by the subtle differences between images.
+            Please relabel some images in expected directions so that the model can learn to distinguish between them.
+            Retrain the model after labeling enough images.
+
             {imgAddedSrcArr.length === 0 ? (
                 <Box
                     display="flex"
@@ -95,7 +99,7 @@ export default function LowConfidenceImagesDisplay() {
                                         color="text.secondary"
                                         sx={{ marginBottom: 1 }}
                                     >
-                                        Prediction: {imgData.label || "Unlabeled"}
+                                        Prediction: {imgData.prediction || "No prediction"}
                                     </Typography>
                                     <Typography
                                         variant="body2"
@@ -104,6 +108,14 @@ export default function LowConfidenceImagesDisplay() {
                                     >
                                         Confidence: {imgData.confidence}
                                     </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        color="text.secondary"
+                                        sx={{ marginBottom: 1 }}
+                                    >
+                                        Label: {imgData.label || "No new label"}
+                                    </Typography>
+
                                     <Box
                                         display="flex"
                                         justifyContent="space-between"

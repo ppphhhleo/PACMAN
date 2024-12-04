@@ -245,7 +245,6 @@ export default class PacmanCovid extends Component {
             this.setState(getInitialState());
             this.componentDidMount();
           }}
-          // open={true}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
           maxWidth="lg"
