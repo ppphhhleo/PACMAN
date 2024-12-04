@@ -154,14 +154,16 @@ export default class PacmanCovid extends Component {
 
 //   return bestDirectionValue;
 // }
-
+  isMonsterEatable(monsters) {
+    return monsters.some(monster => monster.deadTime == 0 && monster.eatingTime != 0);
+  }
 
   step() {
 
       const { player, food, monsters } = this.state;
       // testing(player)
       let suggestedDirection, djikstraPath;
-      if (monsters[0].eatingTime != 0 || monsters[1].eatingTime != 0 || monsters[2].eatingTime != 0 || monsters[3].eatingTime != 0) {
+      if ((monsters[0].deadTime == 0 && monsters[0].eatingTime != 0) || (monsters[1].deadTime == 0 && monsters[1].eatingTime != 0) || (monsters[2].deadTime == 0 && monsters[2].eatingTime != 0) || (monsters[3].deadTime == 0 && monsters[3].eatingTime != 0)) {
         strategy_used = "Eat Monsters";
         ({ direction: suggestedDirection, path: djikstraPath } = testMonsterStrategy(player, monsters))
       }
