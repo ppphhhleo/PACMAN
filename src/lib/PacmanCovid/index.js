@@ -9,8 +9,10 @@ import TopBar from "./TopBar";
 import AllFood from "./Food/All";
 import Monster from "./Monster";
 import Player from "./Player";
-import { bigFoodStrategy, findNextDecisionPoint } from "./ai";
 import LowConfidenceImagesDisplay from "../../components/DataAutoCollection";
+
+import { bigFoodStrategy, findNextDecisionPoint, monsterStrategy, testing, testMonsterStrategy } from "./ai";
+
 import tracks from "./game/tracks";
 import { adjacencyList } from "./adjacency_list";
 
@@ -156,12 +158,19 @@ export default class PacmanCovid extends Component {
 
   step() {
 
-    const { player, food, monsters } = this.state;
-
-      const position = findNextDecisionPoint(player.position, player.direction)
-      const { direction: suggestedDirection, path: djikstraPath } = bigFoodStrategy(position, food);
+      const { player, food, monsters } = this.state;
+      // testing(player)
+      let suggestedDirection, djikstraPath;
+      if (monsters[0].eatingTime != 0 || monsters[1].eatingTime != 0 || monsters[2].eatingTime != 0 || monsters[3].eatingTime != 0) {
+        strategy_used = "Eat Monsters";
+        ({ direction: suggestedDirection, path: djikstraPath } = testMonsterStrategy(player, monsters))
+      }
+      else {
+        strategy_used = "Eat Big Food";
+        ({ direction: suggestedDirection, path: djikstraPath } = bigFoodStrategy(player, food));
+      }
+    
       const current_direction = player.direction;
-      strategy_used = "Eat Big Food";
       if (suggestedDirection !== current_direction) {
         next_direction = suggestedDirection;
       }
@@ -236,7 +245,7 @@ export default class PacmanCovid extends Component {
             this.setState(getInitialState());
             this.componentDidMount();
           }}
-          open={true}
+          // open={true}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
           maxWidth="lg"
