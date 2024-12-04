@@ -10,7 +10,7 @@ import AllFood from "./Food/All";
 import Monster from "./Monster";
 import Player from "./Player";
 import { bigFoodStrategy, findNextDecisionPoint } from "./ai";
-
+import LowConfidenceImagesDisplay from "../../components/DataAutoCollection";
 import tracks from "./game/tracks";
 import { adjacencyList } from "./adjacency_list";
 
@@ -236,15 +236,17 @@ export default class PacmanCovid extends Component {
             this.setState(getInitialState());
             this.componentDidMount();
           }}
-          // open={true}
+          open={true}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
+          maxWidth="lg"
         >
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               <p>You have been infected! </p>
               <p> Score: {this.state.score}</p>
             </DialogContentText>
+            <LowConfidenceImagesDisplay />
           </DialogContent>
         </Dialog>
       </div>

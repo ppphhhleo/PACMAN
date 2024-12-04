@@ -1,12 +1,14 @@
 import { imgAddedSrcArrAtom, imgSrcArrAtom } from "../GlobalState";
 import { useAtom } from "jotai";
 import React from "react";
-import { Grid, Button, Box } from "@mui/material";
+import { Grid, Button, Box, Typography, Card, CardContent } from "@mui/material";
 import {
     ArrowUpward,
     ArrowDownward,
     ArrowBack,
     ArrowForward,
+    Delete as DeleteIcon,
+    Add as AddIcon,
 } from "@mui/icons-material/";
 
 const DIRECTIONS = {
@@ -43,95 +45,124 @@ export default function LowConfidenceImagesDisplay() {
     };
 
     return (
-        <Grid container spacing={2}>
-            <Grid item xs={12}>
-                <Box textAlign="center">
-                    <h3>Low Confidence Images</h3>
-                </Box>
-            </Grid>
+        <Box>
+            <Typography variant="h6" color="text.primary" gutterBottom>
+                Low Confidence Images
+            </Typography>
             {imgAddedSrcArr.length === 0 ? (
-                <Grid item xs={12}>
-                    <Box
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                        sx={{
-                            p: 2,
-                            border: "1px dashed grey",
-                            height: "100px",
-                            backgroundColor: "#f9f9f9",
-                            textAlign: "center",
-                        }}
-                    >
-                        No low-confidence images yet.
-                    </Box>
-                </Grid>
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{
+                        p: 2,
+                        border: "1px dashed grey",
+                        height: "150px",
+                        backgroundColor: "#f9f9f9",
+                        textAlign: "center",
+                    }}
+                >
+                    No low-confidence images to display.
+                </Box>
             ) : (
-                imgAddedSrcArr.map((imgData, index) => (
-                    <Grid item xs={3} key={index}>
-                        <Box
-                            textAlign="center"
-                            sx={{
-                                border: "1px solid #ccc",
-                                padding: "10px",
-                                borderRadius: "5px",
-                                backgroundColor: "#f9f9f9",
-                            }}
-                        >
-                            <img
-                                height={"100px"}
-                                src={imgData.src}
-                                alt={`Prediction: ${imgData.label}`}
-                                style={{ border: "1px solid #ccc", padding: "5px" }}
-                            />
-                            <p style={{ fontSize: "12px", marginTop: "5px" }}>
-                                Prediction: {imgData.label || "Unlabeled"}
-                            </p>
-                            <p style={{ fontSize: "12px", marginTop: "5px" }}>
-                                Confidence: {imgData.confidence}
-                            </p>
-                            <Box>
-                                {/* Direction Buttons */}
-                                {Object.keys(DIRECTIONS).map((directionKey) => {
-                                    const direction = DIRECTIONS[directionKey];
-                                    return (
+                <Grid container spacing={2}>
+                    {imgAddedSrcArr.map((imgData, index) => (
+                        <Grid item xs={12} md={6} lg={4} key={index}>
+                            <Card
+                                sx={{
+                                    border: "1px solid #ccc",
+                                    borderRadius: 2,
+                                    overflow: "hidden",
+                                    boxShadow: 1,
+                                    backgroundColor: "#ffffff", // Highlight relabeled images
+                                }}
+                            >
+                                <CardContent sx={{ padding: 1 }}>
+                                    <Box textAlign="center" marginBottom={1}>
+                                        <img
+                                            height={"100px"}
+                                            src={imgData.src}
+                                            alt={`Prediction: ${imgData.label}`}
+                                            style={{
+                                                borderRadius: "5px",
+                                                border: "1px solid #ccc",
+                                                maxWidth: "100%",
+                                            }}
+                                        />
+                                    </Box>
+                                    <Typography
+                                        variant="body2"
+                                        color="text.secondary"
+                                        sx={{ marginBottom: 1 }}
+                                    >
+                                        Prediction: {imgData.label || "Unlabeled"}
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        color="text.secondary"
+                                        sx={{ marginBottom: 1 }}
+                                    >
+                                        Confidence: {imgData.confidence}
+                                    </Typography>
+                                    <Box
+                                        display="flex"
+                                        justifyContent="space-between"
+                                        marginBottom={1}
+                                    >
+                                        {Object.keys(DIRECTIONS).map((directionKey) => {
+                                            const direction = DIRECTIONS[directionKey];
+                                            const isSelected =
+                                                imgData.label === directionKey; // Highlight selected button
+                                            return (
+                                                <Button
+                                                    key={directionKey}
+                                                    size="small"
+                                                    variant={isSelected ? "contained" : "outlined"}
+                                                    color={isSelected ? "primary" : "inherit"}
+                                                    endIcon={direction.icon}
+                                                    onClick={() =>
+                                                        handleLabelImage(index, directionKey)
+                                                    }
+                                                    sx={{
+                                                        padding: "5px 10px",
+                                                        margin: "0 2px",
+                                                    }}
+                                                >
+                                                    {direction.label}
+                                                </Button>
+                                            );
+                                        })}
+                                    </Box>
+                                    <Box
+                                        display="flex"
+                                        justifyContent="space-between"
+                                        marginTop={1}
+                                    >
                                         <Button
-                                            key={directionKey}
                                             size="small"
-                                            variant="outlined"
-                                            endIcon={direction.icon}
-                                            onClick={() => handleLabelImage(index, directionKey)}
-                                            sx={{ margin: "2px" }}
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={() => handleAddToTrainingData(index)}
+                                            startIcon={<AddIcon />}
                                         >
-                                            {/* {direction.label} */}
+                                            Add to Training
                                         </Button>
-                                    );
-                                })}
-                            </Box>
-                            <Box sx={{ marginTop: "5px" }}>
-                                <Button
-                                    size="small"
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={() => handleAddToTrainingData(index)}
-                                    sx={{ margin: "2px" }}
-                                >
-                                    Add to Training Data
-                                </Button>
-                                <Button
-                                    size="small"
-                                    variant="contained"
-                                    color="secondary"
-                                    onClick={() => handleDeleteImage(index)}
-                                    sx={{ margin: "2px" }}
-                                >
-                                    Delete
-                                </Button>
-                            </Box>
-                        </Box>
-                    </Grid>
-                ))
+                                        <Button
+                                            size="small"
+                                            variant="contained"
+                                            color="secondary"
+                                            onClick={() => handleDeleteImage(index)}
+                                            startIcon={<DeleteIcon />}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </Box>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
             )}
-        </Grid>
+        </Box>
     );
 }
