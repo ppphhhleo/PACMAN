@@ -18,6 +18,13 @@ const DIRECTIONS = {
     right: { icon: <ArrowForward />, label: "Right" },
 };
 
+const directionMap = {
+    1: "UP",
+    3: "DOWN",
+    2: "LEFT",
+    0: "RIGHT",
+};
+
 export default function LowConfidenceImagesDisplay() {
     const [imgAddedSrcArr, setImgAddedSrcArr] = useAtom(imgAddedSrcArrAtom);
     const [imgSrcArr, setImgSrcArr] = useAtom(imgSrcArrAtom);
@@ -70,9 +77,11 @@ export default function LowConfidenceImagesDisplay() {
                 </Box>
             ) : (
                 <Grid container spacing={2}>
-                    {imgAddedSrcArr.map((imgData, index) => (
-                        <Grid item xs={12} md={6} lg={4} key={index}>
-                            <Card
+                    {imgAddedSrcArr
+                        // .filter((imgData) => imgData.prediction)
+                        .map((imgData, index) => (
+                            <Grid item xs={12} md={6} lg={4} key={index}>
+                                <Card
                                 sx={{
                                     border: "1px solid #ccc",
                                     borderRadius: 2,
@@ -97,23 +106,23 @@ export default function LowConfidenceImagesDisplay() {
                                     <Typography
                                         variant="body2"
                                         color="text.secondary"
-                                        sx={{ marginBottom: 1 }}
+                                        sx={{ textAlign: "center", fontSize: "18px" }}
                                     >
-                                        Prediction: {imgData.prediction || "No prediction"}
+                                        Prediction: {directionMap[imgData.prediction] || "No prediction"}
                                     </Typography>
                                     <Typography
                                         variant="body2"
                                         color="text.secondary"
-                                        sx={{ marginBottom: 1 }}
+                                        sx={{ textAlign: "center", fontSize: "18px" }}
                                     >
                                         Confidence: {imgData.confidence}
                                     </Typography>
                                     <Typography
                                         variant="body2"
                                         color="text.secondary"
-                                        sx={{ marginBottom: 1 }}
+                                        sx={{ textAlign: "center", fontSize: "18px" }}
                                     >
-                                        Label: {imgData.label || "No new label"}
+                                        New Label: {imgData.label || "No new label"}
                                     </Typography>
                                     <Box
                                         display="flex"
