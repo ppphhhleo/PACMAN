@@ -149,6 +149,9 @@ const OneDirection = ({ directionIcon, onCapture, dirImgSrcArr, disabled }) => {
                     />
                 )}
             </Box>
+            <Box textAlign="center">
+                {dirImgSrcArr.length > 0 && dirImgSrcArr.length}
+            </Box>
         </Grid>
     );
 };

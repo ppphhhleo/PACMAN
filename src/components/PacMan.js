@@ -7,7 +7,6 @@ import { useAtom } from "jotai";
 export default function PacMan() {
     const [isRunning, setIsRuning] = useAtom(gameRunningAtom);
     const [predictionDirection] = useAtom(predictionAtom);
-
     const pacManProps = {
         gridSize: 17,
         animate: process.env.NODE_ENV !== "development",

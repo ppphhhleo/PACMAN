@@ -1,6 +1,7 @@
 import { imgAddedSrcArrAtom, imgSrcArrAtom } from "../GlobalState";
 import { useAtom } from "jotai";
-import React from "react";
+import React, { useState } from "react";
+import LabelBarChart from "./ImgBarChart";
 import { Grid, Button, Box, Typography, Card, CardContent } from "@mui/material";
 import {
     ArrowUpward,
@@ -28,6 +29,8 @@ const directionMap = {
 export default function LowConfidenceImagesDisplay() {
     const [imgAddedSrcArr, setImgAddedSrcArr] = useAtom(imgAddedSrcArrAtom);
     const [imgSrcArr, setImgSrcArr] = useAtom(imgSrcArrAtom);
+    const [sessionAddedImgSrcArr, setSessionAddedImgSrcArr] = useState([]);
+    const newestImgAddedSrcArr = imgAddedSrcArr.reverse();
 
     const handleLabelImage = (index, direction) => {
         setImgAddedSrcArr((prev) =>
@@ -42,6 +45,7 @@ export default function LowConfidenceImagesDisplay() {
         if (imgData.label) {
             setImgSrcArr((prev) => [...prev, imgData]); // Add to training data
             handleDeleteImage(index); // Remove from display
+            setSessionAddedImgSrcArr((prev) => [...prev, imgData]);
         } else {
             alert("Please label the image before adding to training data.");
         }
@@ -51,9 +55,10 @@ export default function LowConfidenceImagesDisplay() {
         setImgAddedSrcArr((prev) => prev.filter((_, idx) => idx !== index));
     };
 
+    
     return (
         <Box>
-            <Typography variant="h6" color="text.primary" gutterBottom textAlign="center">
+            <Typography variant="h6" color="text.primary" gutterBottom textAlign="center" marginTop={2}>
             Before Next Game...
             </Typography>
             <Typography variant="body1" color="text.primary" gutterBottom marginBottom={2} textAlign="center">
@@ -64,7 +69,17 @@ export default function LowConfidenceImagesDisplay() {
                 - Please <b>Retrain</b> the model after relabeling and adding images for training.
             </Typography>
 
-            {imgAddedSrcArr.length === 0 ? (
+            <div style={{ display: "flex", justifyContent: "space-around", alignItems: "center", marginBottom: 8}}>
+                <div style={{ width: "45%" }}>
+                    <LabelBarChart imgArray={imgSrcArr} title="Total Training Data" color="rgba(69, 123, 59, 0.98)" borderColor="rgba(69, 123, 59, 1)" />
+                </div>
+                <div style={{ width: "45%" }}>
+                    <LabelBarChart imgArray={sessionAddedImgSrcArr} title="New Added Images"/>
+
+                </div>
+            </div>
+
+            {newestImgAddedSrcArr.length === 0 ? (
                 <Box
                     display="flex"
                     justifyContent="center"
@@ -81,7 +96,7 @@ export default function LowConfidenceImagesDisplay() {
                 </Box>
             ) : (
                 <Grid container spacing={2}>
-                    {imgAddedSrcArr
+                    {newestImgAddedSrcArr
                         // .filter((imgData) => imgData.prediction)
                         .map((imgData, index) => (
                             <Grid item xs={12} md={6} lg={4} key={index}>

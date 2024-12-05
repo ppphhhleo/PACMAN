@@ -81,7 +81,7 @@ export default function App() {
                             p: 2,
                             display: "flex",
                             flexDirection: "column",
-                            marginTop: 3,
+                            marginTop: 5,
                         }}
                         >
                         {/* display captured frames here, with buttons to label and add to training data */}
