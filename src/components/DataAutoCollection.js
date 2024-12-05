@@ -136,7 +136,7 @@ export default function LowConfidenceImagesDisplay() {
                                         sx={{ textAlign: "center", fontSize: "18px" }}
                                     >
                                         Prediction: {directionMap[imgData.prediction] || "No prediction"}
-                                        prediction: {imgData.prediction}
+                                        {/* prediction: {imgData.prediction} */}
                                     </Typography>
                                     <Typography
                                         variant="body2"

@@ -204,7 +204,7 @@ export default class Player extends Component {
         <path d={pacmanPath(radius, this.state.angle, offset)} {...pathProps} />
   
         {/* Suggested Direction Arrow */}
-        <line
+        {/* <line
           x1={arrowPosition.x}
           y1={arrowPosition.y}
           x2={arrowPosition.x + arrowDirection.x}
@@ -212,10 +212,10 @@ export default class Player extends Component {
           stroke="blue"
           strokeWidth="2"
           markerEnd="url(#arrowhead)" // Adds an arrowhead marker
-        />
+        /> */}
   
         {/* Arrowhead Definition */}
-        <defs>
+        {/* <defs>
           <marker
             id="arrowhead"
             markerWidth="10"
@@ -226,7 +226,7 @@ export default class Player extends Component {
           >
             <polygon points="0 0, 10 3.5, 0 7" fill="red" />
           </marker>
-        </defs>
+        </defs> */}
       </svg>
     );
   }
