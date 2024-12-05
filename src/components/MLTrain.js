@@ -157,7 +157,7 @@ export default function MLTrain({ webcamRef }) {
     );
 
     const ReguarlDisplay = (
-        <Grid container spacing={2}>
+        <Grid container space={2}>
             <Grid item xs={6}>
                 {gameTrial > 1 ? 
                     <Button 
@@ -182,7 +182,6 @@ export default function MLTrain({ webcamRef }) {
                         {trainingProgress == -1 ? "Train" : lossVal? "Stop": 'Loading...'}
                     </Button>
                 }
-                
                 <LinearProgress
                     variant="determinate"
                     value={trainingProgress}
@@ -199,7 +198,7 @@ export default function MLTrain({ webcamRef }) {
                 <div style={{ marginTop: 0}}>
                     <LossChart lossArray={lossArray} />
                 </div>
-                <div style={{ marginTop: 1}}>
+                <div style={{ marginTop: 0}}>
                     <LabelBarChart imgArray={imgSrcArr} title="Training Data" color="rgba(69, 123, 59, 0.98)" borderColor="rgba(69, 123, 59, 1)" />
                 </div>
                 {/* <JSONWriter /> <br /> */}

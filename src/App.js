@@ -63,7 +63,7 @@ export default function App() {
                                     p: 2,
                                     display: "flex",
                                     flexDirection: "column",
-                                    height: 340,
+                                    height: 365,
                                 }}
                             >
                                 <MLTrain webcamRef={webcamRef} />

@@ -21,7 +21,7 @@ export default function LossChart({ lossArray }) {
         datasets: [
             {
                 label: "Loss",
-                data: lossArray.map((entry) => entry.loss), // Y-axis values
+                data: lossArray.map((entry) => Number(entry.loss).toFixed(5)), // Y-axis values
                 borderColor: "#8ACE00",    
                 backgroundColor: "#8ACE00",
                 tension: 0.3, // Smooth line
