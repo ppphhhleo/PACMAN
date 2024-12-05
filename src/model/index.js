@@ -70,6 +70,8 @@ export async function processImages(imgSrcArr, truncatedMobileNet) {
 export async function buildModel(
   truncatedMobileNet,
   setLoss,
+  setLossArray,
+  gameTrial,
   controllerDataset,
   hiddenUnits = 100,
   batchSize = 1,
@@ -105,6 +107,7 @@ export async function buildModel(
   const optimizer = tf.train.adam(learningrate);
   model.compile({ optimizer: optimizer, loss: "categoricalCrossentropy" });
   const store = getDefaultStore();
+  let finalLoss = null;
 
   model.fit(controllerDataset.xs, controllerDataset.ys, {
     batchSize,
@@ -115,6 +118,7 @@ export async function buildModel(
       },
       onTrainEnd: async () => {
         store.set(trainingProgressAtom, -1);
+        setLossArray((prev) => [...prev, {loss: finalLoss, trial: gameTrial}]);
 
         console.log("Training has ended.");
       },
@@ -123,6 +127,7 @@ export async function buildModel(
           trainingProgressAtom,
           Math.floor(((epoch + 1) / epochs) * 100)
         );
+        finalLoss = logs.loss.toFixed(5);
         if (store.get(stopTrainingAtom)) {
           model.stopTraining = true;
           store.set(stopTrainingAtom, false);

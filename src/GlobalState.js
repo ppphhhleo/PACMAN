@@ -16,7 +16,9 @@ export const imgSrcArrAtom = atom([]); // collected images, formate {src: string
 export const imgAddedSrcArrAtom = atom([]); // collected images, formate {src: string, label: string, prediction: string, confidence: number}
 // ---- UI Display ----
 export const lossAtom = atom(null); // Loss value
+export const lossArrayAtom = atom([]); // Loss value array {loss: number, trial: number}
 export const trainingProgressAtom = atom(-1); // Training progress
 export const stopTrainingAtom = atom(false); // Flag to stop training
+export const gameTrialAtom = atom(1); // Game trial number
 
 

@@ -20,6 +20,7 @@
         "jotai": "^2.8.2",
         "pacman-react": "0.0.2",
         "react": "^18.0.0",
+        "react-chartjs-2": "^5.2.0",
         "react-dom": "^18.0.0",
         "react-scripts": "^5.0.0",
         "react-webcam": "^7.2.0",
