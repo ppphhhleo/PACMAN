@@ -11,7 +11,7 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const LabelBarChart = ({ imgArray, title, color="rgba(75, 192, 192, 0.7)", borderColor="rgba(75, 192, 192, 1)"}) => {
+export default function LabelBarChart({ imgArray, title, color="rgba(75, 192, 192, 0.7)", borderColor="rgba(75, 192, 192, 1)"}) {
 
     // Count the occurrences of each label
     
@@ -67,5 +67,3 @@ const LabelBarChart = ({ imgArray, title, color="rgba(75, 192, 192, 0.7)", borde
 
     return <Bar data={data} options={options} />;
 };
-
-export default LabelBarChart;

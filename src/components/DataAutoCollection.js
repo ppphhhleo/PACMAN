@@ -33,6 +33,7 @@ export default function LowConfidenceImagesDisplay() {
     const newestImgAddedSrcArr = imgAddedSrcArr.reverse();
 
     const handleLabelImage = (index, direction) => {
+        // console.log(index, direction);
         setImgAddedSrcArr((prev) =>
             prev.map((imgData, idx) =>
                 idx === index ? { ...imgData, label: direction } : imgData
@@ -43,9 +44,13 @@ export default function LowConfidenceImagesDisplay() {
     const handleAddToTrainingData = (index) => {
         const imgData = imgAddedSrcArr[index];
         if (imgData.label) {
-            setImgSrcArr((prev) => [...prev, imgData]); // Add to training data
+            const newImgData = {src: imgData.src, label: imgData.label};
+            const newImageArr = [...imgSrcArr, newImgData];
+            setImgSrcArr(newImageArr); // Add to training data
             handleDeleteImage(index); // Remove from display
-            setSessionAddedImgSrcArr((prev) => [...prev, imgData]);
+            setSessionAddedImgSrcArr((prev) => [...prev, newImgData]);
+            console.log("Added to training data: ", newImgData);
+            console.log("ImgSrcArr: ", imgSrcArr);
         } else {
             alert("Please label the image before adding to training data.");
         }
@@ -62,7 +67,7 @@ export default function LowConfidenceImagesDisplay() {
             Before Next Game...
             </Typography>
             <Typography variant="body1" color="text.primary" gutterBottom marginBottom={2} textAlign="center">
-                Model has Low Confidence in images below as it is confused by the subtle differences between images.
+                Some images may need to be relabeled for model to learn.
                 <br />
                 - Please <b>Relabel</b> images in expected directions for model to learn.
                 <br />
@@ -131,6 +136,7 @@ export default function LowConfidenceImagesDisplay() {
                                         sx={{ textAlign: "center", fontSize: "18px" }}
                                     >
                                         Prediction: {directionMap[imgData.prediction] || "No prediction"}
+                                        prediction: {imgData.prediction}
                                     </Typography>
                                     <Typography
                                         variant="body2"
