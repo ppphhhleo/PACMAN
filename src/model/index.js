@@ -168,11 +168,13 @@ export async function predictDirection(webcamRef, truncatedMobileNet, model) {
         break;
       case 2:
         prediction = 2;
+        break;
       case 3:
         prediction = 0;
         break;
       default:
         prediction = -1;
+        break;
     }
   }
   return {prediction, confidence, newImageSrc}

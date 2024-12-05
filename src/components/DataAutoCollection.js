@@ -43,9 +43,10 @@ export default function LowConfidenceImagesDisplay() {
 
     const handleAddToTrainingData = (index) => {
         const imgData = imgAddedSrcArr[index];
-        const newImgData = {src: imgData.src, label: imgData.label};
         if (imgData.label) {
-            setImgSrcArr((prev) => [...prev, newImgData]); // Add to training data
+            const newImgData = {src: imgData.src, label: imgData.label};
+            const newImageArr = [...imgSrcArr, newImgData];
+            setImgSrcArr(newImageArr); // Add to training data
             handleDeleteImage(index); // Remove from display
             setSessionAddedImgSrcArr((prev) => [...prev, newImgData]);
             console.log("Added to training data: ", newImgData);
@@ -135,6 +136,7 @@ export default function LowConfidenceImagesDisplay() {
                                         sx={{ textAlign: "center", fontSize: "18px" }}
                                     >
                                         Prediction: {directionMap[imgData.prediction] || "No prediction"}
+                                        prediction: {imgData.prediction}
                                     </Typography>
                                     <Typography
                                         variant="body2"
