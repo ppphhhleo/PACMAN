@@ -49,8 +49,8 @@ export default function LowConfidenceImagesDisplay() {
             setImgSrcArr(newImageArr); // Add to training data
             handleDeleteImage(index); // Remove from display
             setSessionAddedImgSrcArr((prev) => [...prev, newImgData]);
-            console.log("Added to training data: ", newImgData);
-            console.log("ImgSrcArr: ", imgSrcArr);
+            // console.log("Added to training data: ", newImgData);
+            // console.log("ImgSrcArr: ", imgSrcArr);
         } else {
             alert("Please label the image before adding to training data.");
         }

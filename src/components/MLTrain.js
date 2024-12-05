@@ -103,8 +103,8 @@ export default function MLTrain({ webcamRef }) {
             const {prediction, confidence, newImageSrc} = await predictDirection(webcamRef, truncatedMobileNet, model)
             // console.log("newImageSrc", newImageSrc)
             setPredictionDirection(prediction);
-            console.log("confidence", prediction);
-            if ((confidence < 0.6 && newImageSrc !== null) || (confidence > 0.85 && newImageSrc !== undefined)) {
+            // console.log("confidence", prediction);
+            if ((confidence < 0.6 && newImageSrc !== null) || (confidence < 0.7 && newImageSrc !== undefined)) {
             // Use the updater function pattern to avoid stale state issues
             setImgAddedSrcArr((prev) => [
                 ...prev,
