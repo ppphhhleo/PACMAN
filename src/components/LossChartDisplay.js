@@ -14,7 +14,7 @@ import {
 // Register chart components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-export default function LossChart({ lossArray }) {
+export default function LossChartDisplay({ lossArray }) {
     // Prepare data for the chart
     const data = {
         labels: lossArray.map((entry) => `Train ${entry.trial}`), // X-axis labels

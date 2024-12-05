@@ -32,7 +32,7 @@ import { data, train } from "@tensorflow/tfjs";
 // import JSONWriter from "./JSONWriter";
 // import JSONLoader from "./JSONLoader";
 import LabelBarChart from "./ImgBarChart";
-import LossChart from "./LossChart";
+import LossChart from "./LossChartDisplay";
 
 function generateSelectComponent(
     label,
