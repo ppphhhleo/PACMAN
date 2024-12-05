@@ -63,12 +63,11 @@ export default function App() {
                                     p: 2,
                                     display: "flex",
                                     flexDirection: "column",
-                                    height: 340,
+                                    height: 365,
                                 }}
                             >
                                 <MLTrain webcamRef={webcamRef} />
                             </Paper>
-                            
                         </Grid>
                         {/* Recent Deposits */}
                         <Grid item xs={12} md={6} lg={6}>
@@ -82,7 +81,7 @@ export default function App() {
                             p: 2,
                             display: "flex",
                             flexDirection: "column",
-                            marginTop: 3,
+                            marginTop: 5,
                         }}
                         >
                         {/* display captured frames here, with buttons to label and add to training data */}

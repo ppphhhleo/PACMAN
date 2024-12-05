@@ -24,11 +24,15 @@ import {
     imgAddedSrcArrAtom,
     gameRunningAtom,
     predictionAtom,
+    gameTrialAtom,
+    lossArrayAtom,
 } from "../GlobalState";
 import { useAtom } from "jotai";
 import { data, train } from "@tensorflow/tfjs";
 // import JSONWriter from "./JSONWriter";
 // import JSONLoader from "./JSONLoader";
+import LabelBarChart from "./ImgBarChart";
+import LossChart from "./LossChart";
 
 function generateSelectComponent(
     label,
@@ -76,8 +80,9 @@ export default function MLTrain({ webcamRef }) {
 
     // ---- UI Display ----
     const [lossVal, setLossVal] = useAtom(lossAtom);
+    const [lossArray, setLossArray] = useAtom(lossArrayAtom);
     const [trainingProgress, setTrainingProgress] = useAtom(trainingProgressAtom);
-
+    const [gameTrial, setGameTrial] = useAtom(gameTrialAtom);
 
     const [batchSize, setBatchSize] = useAtom(batchSizeAtom);
     const batchValueArray = [0.05, 0.1, 0.4, 1].map(r=>Math.floor(imgSrcArr.length * r));
@@ -130,6 +135,8 @@ export default function MLTrain({ webcamRef }) {
         const dataset = await processImages(imgSrcArr, truncatedMobileNet);
         const model = await buildModel(truncatedMobileNet,
             setLossVal,
+            setLossArray,
+            gameTrial,
             dataset,
             hiddenUnits,
             batchSize,
@@ -152,15 +159,29 @@ export default function MLTrain({ webcamRef }) {
     const ReguarlDisplay = (
         <Grid container space={2}>
             <Grid item xs={6}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {
-                        trainingProgress == -1? trainModel() : stopTrain();
-                    }}
-                >
-                    {trainingProgress == -1 ? "Train" : lossVal? "Stop": 'Loading...'}
-                </Button>
+                {gameTrial > 1 ? 
+                    <Button 
+                        variant="contained" 
+                        color="success"
+                        // style={{backgroundColor: "#8ACE00"}}
+                        onClick={() => {
+                            trainingProgress == -1? trainModel() : stopTrain();
+                            setGameTrial((prev) => prev + 1);
+                        }}
+                    > {trainingProgress == -1 ? "Retrain" : lossVal? "Stop": 'Loading...'}
+                    </Button> : 
+
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => {
+                            trainingProgress == -1? trainModel() : stopTrain();
+                            setGameTrial((prev) => prev + 1);
+                        }}
+                    >
+                        {trainingProgress == -1 ? "Train" : lossVal? "Stop": 'Loading...'}
+                    </Button>
+                }
                 <LinearProgress
                     variant="determinate"
                     value={trainingProgress}
@@ -172,8 +193,14 @@ export default function MLTrain({ webcamRef }) {
                 />
                 <Typography variant="h6">
                     LOSS: {lossVal === null ? "" : lossVal} <br />
-                    Dataset Size: {imgSrcArr.length} <br />
+                    {/* Dataset Size: {imgSrcArr.length} <br /> */}
                 </Typography>
+                <div style={{ marginTop: 0}}>
+                    <LossChart lossArray={lossArray} />
+                </div>
+                <div style={{ marginTop: 0}}>
+                    <LabelBarChart imgArray={imgSrcArr} title="Training Data" color="rgba(69, 123, 59, 0.98)" borderColor="rgba(69, 123, 59, 1)" />
+                </div>
                 {/* <JSONWriter /> <br /> */}
             </Grid>
             <Grid item xs={6}>
